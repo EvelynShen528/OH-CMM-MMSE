@@ -7,12 +7,16 @@
 *（2）Merge之后的drop，c. 随访第一年mmse missing的人，要按你的入组年份加一个wave，不要直接用我这的02
 *（3）计算status和livetime都要特别注意，有什么不清楚的可以群里问
 
-////////////////////////////////////////////////////////////////////////////////
-（1）00年入组---基线（00）
+*****************************************************************
+****************（1）00年入组---基线（00） ******************* //高亮用comment 高亮，平时不要加入让代码跑不下去的内容
+*****************************************************************
+
 *导入2000原始数据库
 *一、提取此cross-sectional数据中某年份入组的人:
 *跑完这一步去google sheet 检查一下n是否正确：https://docs.google.com/spreadsheets/d/1BoQ5vQAY2CGN5qYl8iVKZV4HU9WOS-CeHkRtl6wZWT4/edit?gid=662585787#gid=662585787
 *需改动：入组年份
+// cd ""
+// use "xxxx.dta",clear		//使用数据都要写入，哪怕合作者和你用不同的路径，至少让人知道这里用了什么数据
 describe id
 gen id_str = string(id, "%08.0f")
 gen ends_with_00 = substr(id_str, length(id_str)-1, 2) == "00"
@@ -79,54 +83,21 @@ gen m1_00 = c16_00
 replace m1_00 = 7 if c16_00 >= 7 & c16_00!=99
 replace m1_00 = c16_00 if c16_00 < 7
 replace m1_00 = . if c16_00 == 99
-* Step 2: Generate m2 variable without deleting any data
-replace c11_00=0 if c11_00==8
-replace c12_00=0 if c12_00==8
-replace c13_00=0 if c13_00==8
-replace c14_00=0 if c14_00==8
-replace c15_00=0 if c15_00==8
-replace c21a_00=0 if c21a_00==8
-replace c21b_00=0 if c21b_00==8
-replace c21c_00=0 if c21c_00==8
-replace c31a_00=0 if c31a_00==8
-replace c31b_00=0 if c31b_00==8
-replace c31c_00=0 if c31c_00==8
-replace c31d_00=0 if c31d_00==8
-replace c31e_00=0 if c31e_00==8
-replace c32_00=0 if c32_00==8
-replace c41a_00=0 if c41a_00==8
-replace c41b_00=0 if c41b_00==8
-replace c41c_00=0 if c41c_00==8
-replace c51a_00=0 if c51a_00==8
-replace c51b_00=0 if c51b_00==8
-replace c52_00=0 if c52_00==8
-replace c53a_00=0 if c53a_00==8
-replace c53b_00=0 if c53b_00==8
-replace c53c_00=0 if c53c_00==8
+* Step 2: Generate m2 variable without deleting any data //批量处理一定有comment可以替代的，大多都不用这样专门写出来
+recode c11_00  c12_00 c13_00 c14_00 c15_00 c21a_00 c21b_00 c21c_00 c31a_00 c31b_00 c31c_00 c31d_00 c31e_00 c32_00 c41a_00 c41b_00 c41c_00 c51a_00 c51b_00 c52_00 c53a_00 c53b_00 c53c_00 (8=0)
+
 gen m2_00 = c11_00 + c12_00 + c13_00 + c14_00 + c15_00 + c21a_00 + c21b_00 + c21c_00 + c31a_00 + c31b_00 + c31c_00 + c31d_00 + c31e_00 + c32_00 + c41a_00 + c41b_00 + c41c_00 + c51a_00 + c51b_00 + c52_00 + c53a_00 + c53b_00 + c53c_00 
-replace m2_00 = . if c11_00== 9
-replace m2_00 = . if c12_00==9
-replace m2_00 = . if c13_00==9
-replace m2_00 = . if c14_00==9
-replace m2_00 = . if c15_00==9
-replace m2_00 = . if c21a_00==9
-replace m2_00 = . if c21b_00==9
-replace m2_00 = . if c21c_00==9
-replace m2_00 = . if c31a_00==9
-replace m2_00 = . if c31b_00==9
-replace m2_00 = . if c31c_00==9
-replace m2_00 = . if c31d_00==9
-replace m2_00 = . if c31e_00==9
-replace m2_00 = . if c32_00==9
-replace m2_00 = . if c41a_00==9
-replace m2_00 = . if c41b_00==9
-replace m2_00 = . if c41c_00==9
-replace m2_00 = . if c51a_00==9
-replace m2_00 = . if c51b_00==9
-replace m2_00 = . if c52_00==9
-replace m2_00 = . if c53a_00==9
-replace m2_00 = . if c53b_00==9
-replace m2_00 = . if c53c_00==9
+
+foreach k in  11 12   13   14   15   21a   21b   21c   31a   31b   31c   31d   31e   32   41a   41b   41c   51a   51b   52   53a   53b   53c  {
+	replace m2_00 = . if c`k'_00== 9				//多用循环压缩代码，不然像这样完全列出来的话，代码可读性会变得很差，你自己如果后面要修改也负担很重。而且我只控了c`k'_00，这个代码小改一下可以直接用在其他wave，甚至可以嵌套循环。
+}
+
+//假设你把98-18年的数据都merge到了一起，只想改00，05wave的情况你可以写循环嵌套
+foreach t in 00 05 {
+	foreach k in  11 12   13   14   15   21a   21b   21c   31a   31b   31c   31d   31e   32   41a   41b   41c   51a   51b   52   53a   53b   53c  {
+		replace m2_`t' = . if c`k'_`t'== 9				//多用循环压缩代码，不然像这样完全列出来的话，代码可读性会变得很差，你自己如果后面要修改也负担很重。而且我只控了c`k'_00，这个代码小改一下可以直接用在其他wave，甚至可以嵌套循环。
+	}
+}	
 * Step 3: Generate mmse variable without deleting any data
 gen mmse_00 = m1_00 + m2_00
 replace mmse_00 = . if m1_00==.
@@ -139,6 +110,8 @@ replace mmse_bi_00 = . if mmse_00 == .
 tabulate mmse_00
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
 tabulate mmse_bi_00
+
+//save "00in_02.dta",replace //这里一定要写出来你在这里存了数据，叫什么名字
 
 *另存为，命名为00in_00,也就是入组年份in_wave年份，把你负责的入组年份的所有wave放在一个文件夹(名字00in_Merge)里面
 
