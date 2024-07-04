@@ -178,13 +178,14 @@ gen mmse_quat = mmse
 replace mmse_quat = 0 if mmse >= 25
 replace mmse_quat = 1 if mmse >= 18 & mmse <= 24
 replace mmse_quat = 2 if mmse >= 10 & mmse <=17
-replace mmse quat = 3 if mmse >= 0 & mmse <= 9
+replace mmse_quat = 3 if mmse >= 0 & mmse <= 9
 
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
 tabulate mmse_18
 tabulate mmse_20
 tabulate mmse_24
 tabulate mmse_edu
+tabulate mmse_quat
 **************************2014年******************************
 * Step 1: set missing row less than 10
 gen byte mis_c16_14 = (c16_14 == 99 | c16_14 == 88)
@@ -242,11 +243,18 @@ replace mmse_edu_14 = 1 if edug == 2 & mmse_14 < 22
 replace mmse_edu_14 = 0 if edug == 2 & mmse_14 >= 22  ///primary school (6 yrs)
 replace mmse_edu_14 = 1 if edug == 3 & mmse_14 < 26
 replace mmse_edu_14 = 0 if edug == 3 & mmse_14 >= 26 & mmse_14 <= 28  ///middle school or higher (>6 yrs)
+* Generate mmse quaternary variable, classified as no (MMSE score: 25–30), mild (18–24), moderate (10–17), and severe (0–9)
+gen mmse_quat_14 = mmse_14
+replace mmse_quat_14 = 0 if mmse_14 >= 25
+replace mmse_quat_14 = 1 if mmse_14 >= 18 & mmse_14 <= 24
+replace mmse_quat_14 = 2 if mmse_14 >= 10 & mmse_14 <=17
+replace mmse_quat_14 = 3 if mmse_14 >= 0 & mmse_14 <= 9
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
 tabulate mmse_18_14
 tabulate mmse_20_14
 tabulate mmse_24_14
 tabulate mmse_edu_14
+tabulate mmse_quat_14
 **************************2018年******************************
 * Step 1: set missing row less than 10
 gen byte mis_c16_18 = (c16_18 == 99 | c16_18 == 88)
@@ -304,11 +312,18 @@ replace mmse_edu_18 = 1 if edug == 2 & mmse_18 < 22
 replace mmse_edu_18 = 0 if edug == 2 & mmse_18 >= 22  ///primary school (6 yrs)
 replace mmse_edu_18 = 1 if edug == 3 & mmse_18 < 26
 replace mmse_edu_18 = 0 if edug == 3 & mmse_18 >= 26 & mmse_18 <= 28  ///middle school or higher (>6 yrs)
+* Generate mmse quaternary variable, classified as no (MMSE score: 25–30), mild (18–24), moderate (10–17), and severe (0–9)
+gen mmse_quat_18 = mmse_18
+replace mmse_quat_18 = 0 if mmse_18 >= 25
+replace mmse_quat_18 = 1 if mmse_18 >= 18 & mmse_18 <= 24
+replace mmse_quat_18 = 2 if mmse_18 >= 10 & mmse_18 <=17
+replace mmse_quat_18 = 3 if mmse_18 >= 0 & mmse_18 <= 9
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
 tabulate mmse_18_18
 tabulate mmse_20_18
 tabulate mmse_24_18
 tabulate mmse_edu_18
+tabulate mmse_quat_18
 
 
 * 六.drop
