@@ -194,14 +194,13 @@ replace mmse_24 = 1 if mmse < 24
 replace mmse_24 = 0 if mmse >= 24
 replace mmse_24 = . if mmse == .
 * Generate mmse binary variable according to the educational level. 
-* mmse_11 should be generated before run these codes
 gen mmse_edu = mmse
 replace mmse_edu = 1 if edug == 1 & mmse < 19
 replace mmse_edu = 0 if edug == 1 & mmse >= 19  ///without education
 replace mmse_edu = 1 if edug == 2 & mmse < 22
 replace mmse_edu = 0 if edug == 2 & mmse >= 22  ///primary school (6 yrs)
-replace mmse_edu = 1 if edug == 3 & mmse < 26 & mmse_11 - mmse >= 3
-replace mmse_edu = 0 if (edug == 3 & mmse >= 26 & mmse <= 28) | (edug == 3 & mmse < 26 & mmse_11 - mmse < 3)  ///middle school or higher (>6 yrs)
+replace mmse_edu = 1 if edug == 3 & mmse < 26
+replace mmse_edu = 0 if edug == 3 & mmse >= 26 & mmse <= 28  ///middle school or higher (>6 yrs)
 
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
 tabulate mmse_18
@@ -258,7 +257,6 @@ replace mmse_24_11 = 1 if mmse_11 < 24
 replace mmse_24_11 = 0 if mmse_11 >= 24
 replace mmse_24_11 = .  if mmse_11 == .
 * Generate mmse binary variable according to the educational level
-* mmse_14 should be generated before run these codes
 gen mmse_edu = mmse
 replace mmse_edu_11 = 1 if edug == 1 & mmse_11 < 19
 replace mmse_edu_11 = 0 if edug == 1 & mmse_11 >= 19  ///without education
@@ -322,7 +320,6 @@ replace mmse_24_14 = 1 if mmse_14 < 24
 replace mmse_24_14 = 0 if mmse_14 >= 24
 replace mmse_24_14 = .  if mmse_14 == .
 * Generate mmse binary variable according to the educational level
-* mmse_18 should be generated before run these codes
 gen mmse_edu = mmse
 replace mmse_edu_14 = 1 if edug == 1 & mmse_14 < 19
 replace mmse_edu_14 = 0 if edug == 1 & mmse_14 >= 19  ///without education
@@ -385,7 +382,6 @@ replace mmse_24_18 = 1 if mmse_18 < 24
 replace mmse_24_18 = 0 if mmse_18 >= 24
 replace mmse_24_18 = .  if mmse_18 == .
 * Generate mmse binary variable according to the educational level
-* mmse_18 should be generated before run these codes
 gen mmse_edu = mmse
 replace mmse_edu_18 = 1 if edug == 1 & mmse_18 < 19
 replace mmse_edu_18 = 0 if edug == 1 & mmse_18 >= 19  ///without education
