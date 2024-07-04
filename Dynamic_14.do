@@ -124,12 +124,36 @@ gen mmse = m1 + m2
 drop  mis_* total_mis_dontknow m1 m2
 tab mmse
 * Step 5: Generate mmse_bi variable without deleting any data
-gen mmse_bi = mmse
-replace mmse_bi = 1 if mmse < 18
-replace mmse_bi = 0 if mmse >= 18
-replace mmse_bi = . if mmse == .
+* Generate mmse binary variable with cut off point as 18
+gen mmse_18 = mmse
+replace mmse_18 = 1 if mmse < 18
+replace mmse_18 = 0 if mmse >= 18
+replace mmse_18 = . if mmse == .
+* Generate mmse binary variable with cut off point as 20
+gen mmse_20 = mmse
+replace mmse_20 = 1 if mmse < 20
+replace mmse_20 = 0 if mmse >= 20
+replace mmse_20 = . if mmse == .
+* Generate mmse binary variable with cut off point as 24
+gen mmse_24 = mmse
+replace mmse_24 = 1 if mmse < 24
+replace mmse_24 = 0 if mmse >= 24
+replace mmse_24 = . if mmse == .
+* Generate mmse binary variable according to the educational level. 
+gen mmse_edu = mmse
+replace mmse_edu = 1 if edug == 1 & mmse < 19
+replace mmse_edu = 0 if edug == 1 & mmse >= 19  ///without education
+replace mmse_edu = 1 if edug == 2 & mmse < 22
+replace mmse_edu = 0 if edug == 2 & mmse >= 22  ///primary school (6 yrs)
+replace mmse_edu = 1 if edug == 3 & mmse < 26
+replace mmse_edu = 0 if edug == 3 & mmse >= 26 & mmse <= 28  ///middle school or higher (>6 yrs)
+
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
-tabulate mmse_bi
+tabulate mmse_18
+tabulate mmse_20
+tabulate mmse_24
+tabulate mmse_edu
+
 **************************2018年******************************
 * Step 1: set missing row less than 10
 gen byte mis_c16_18 = (c16_18 == 99 | c16_18 == 88)
@@ -164,12 +188,35 @@ gen mmse_18 = m1_18 + m2_18
 drop  mis_* total_mis_dontknow m1_18 m2_18
 tab mmse_18
 * Step 5: Generate mmse_bi variable without deleting any data
-gen mmse_bi_18 = mmse_18
-replace mmse_bi_18 = 1 if mmse_18 < 18
-replace mmse_bi_18 = 0 if mmse_18 >= 18
-replace mmse_bi_18 = . if mmse_18 == .
+* Generate mmse binary variable with cut off point as 18
+gen mmse_18_18 = mmse_18
+replace mmse_18_18 = 1 if mmse_18 < 18
+replace mmse_18_18 = 0 if mmse_18 >= 18
+replace mmse_18_18 = . if mmse_18 == .
+* Generate mmse binary variable with cut off point as 20
+gen mmse_20_18 = mmse
+replace mmse_20_18 = 1 if mmse_18 < 20
+replace mmse_20_18 = 0 if mmse_18 >= 20
+replace mmse_20_18 = . if mmse_18 == .
+* Generate mmse binary variable with cut off point as 24
+gen mmse_24_18 = mmse
+replace mmse_24_18 = 1 if mmse_18 < 24
+replace mmse_24_18 = 0 if mmse_18 >= 24
+replace mmse_24_18 = . if mmse_18 == .
+* Generate mmse binary variable according to the educational level. 
+gen mmse_edu_18 = mmse
+replace mmse_edu_18 = 1 if edug == 1 & mmse_18 < 19
+replace mmse_edu_18 = 0 if edug == 1 & mmse_18 >= 19  ///without education
+replace mmse_edu_18 = 1 if edug == 2 & mmse_18 < 22
+replace mmse_edu_18 = 0 if edug == 2 & mmse_18 >= 22  ///primary school (6 yrs)
+replace mmse_edu_18 = 1 if edug == 3 & mmse_18 < 26
+replace mmse_edu_18 = 0 if edug == 3 & mmse_18 >= 26 & mmse_18 <= 28  ///middle school or higher (>6 yrs)
+
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
-tabulate mmse_bi_18
+tabulate mmse_18_18
+tabulate mmse_20_18
+tabulate mmse_24_18
+tabulate mmse_edu_18
 
 * 六.drop
 drop if trueage <65
