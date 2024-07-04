@@ -178,12 +178,36 @@ gen mmse = m1 + m2
 drop  mis_* total_mis_dontknow m1 m2
 tab mmse
 * Step 5: Generate mmse_bi variable without deleting any data
-gen mmse_bi = mmse
-replace mmse_bi = 1 if mmse < 18
-replace mmse_bi = 0 if mmse >= 18
-replace mmse_bi = . if mmse == .
+* Generate mmse binary variable with cut off point as 18
+gen mmse_18 = mmse
+replace mmse_18 = 1 if mmse < 18
+replace mmse_18 = 0 if mmse >= 18
+replace mmse_18 = . if mmse == .
+* Generate mmse binary variable with cut off point as 20
+gen mmse_20 = mmse
+replace mmse_20 = 1 if mmse < 20
+replace mmse_20 = 0 if mmse >= 20
+replace mmse_20 = . if mmse == .
+* Generate mmse binary variable with cut off point as 24
+gen mmse_24 = mmse
+replace mmse_24 = 1 if mmse < 24
+replace mmse_24 = 0 if mmse >= 24
+replace mmse_24 = . if mmse == .
+* Generate mmse binary variable according to the educational level. 
+* mmse_11 should be generated before run these codes
+gen mmse_edu = mmse
+replace mmse_edu = 1 if edug == 1 & mmse < 19
+replace mmse_edu = 0 if edug == 1 & mmse >= 19  ///without education
+replace mmse_edu = 1 if edug == 2 & mmse < 22
+replace mmse_edu = 0 if edug == 2 & mmse >= 22  ///primary school (6 yrs)
+replace mmse_edu = 1 if edug == 3 & mmse < 26 & mmse_11 - mmse >= 3
+replace mmse_edu = 0 if (edug == 3 & mmse >= 26 & mmse <= 28) | (edug == 3 & mmse < 26 & mmse_11 - mmse < 3)  ///middle school or higher (>6 yrs)
+
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
-tabulate mmse_bi
+tabulate mmse_18
+tabulate mmse_20
+tabulate mmse_24
+tabulate mmse_edu
 **************************2011年******************************
 * Step 1: set missing row less than 10
 gen byte mis_c16_11 = (c16_11 == 99 | c16_11 == 88)
@@ -218,12 +242,36 @@ gen mmse_11 = m1_11 + m2_11
 drop  mis_* total_mis_dontknow m1_11 m2_11
 tab mmse_11
 * Step 5: Generate mmse_bi variable without deleting any data
-gen mmse_bi_11 = mmse_11
-replace mmse_bi_11 = 1 if mmse_11 < 18
-replace mmse_bi_11 = 0 if mmse_11 >= 18
-replace mmse_bi_11 = . if mmse_11 == .
+* Generate mmse binary variable with cut off point as 18
+gen mmse_18bi_11 = mmse_11
+replace mmse_18_11 = 1 if mmse_11 < 18
+replace mmse_18_11 = 0 if mmse_11 >= 18
+replace mmse_18_11 = . if mmse_11 == .
+* Generate mmse binary variable with cut off point as 20
+gen mmse_20_11 = mmse
+replace mmse_20_11 = 1 if mmse_11 < 20
+replace mmse_20_11 = 0 if mmse_11 >= 20
+replace mmse_20_11 = .  if mmse_11 == .
+* Generate mmse binary variable with cut off point as 24
+gen mmse_24_11 = mmse
+replace mmse_24_11 = 1 if mmse_11 < 24
+replace mmse_24_11 = 0 if mmse_11 >= 24
+replace mmse_24_11 = .  if mmse_11 == .
+* Generate mmse binary variable according to the educational level
+* mmse_14 should be generated before run these codes
+gen mmse_edu = mmse
+replace mmse_edu_11 = 1 if edug == 1 & mmse_11 < 19
+replace mmse_edu_11 = 0 if edug == 1 & mmse_11 >= 19  ///without education
+replace mmse_edu_11 = 1 if edug == 2 & mmse_11 < 22
+replace mmse_edu_11 = 0 if edug == 2 & mmse_11 >= 22  ///primary school (6 yrs)
+replace mmse_edu_11 = 1 if edug == 3 & mmse_11 < 26
+replace mmse_edu_11 = 0 if edug == 3 & mmse_11 >= 26 & mmse_11 <= 28  ///middle school or higher (>6 yrs)
+
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
-tabulate mmse_bi_11
+tabulate mmse_18_11
+tabulate mmse_20_11
+tabulate mmse_24_11
+tabulate mmse_edu_11
 **************************2014年******************************
 * Step 1: set missing row less than 10
 gen byte mis_c16_14 = (c16_14 == 99 | c16_14 == 88)
@@ -258,12 +306,35 @@ gen mmse_14 = m1_14 + m2_14
 drop  mis_* total_mis_dontknow m1_14 m2_14
 tab mmse_14
 * Step 5: Generate mmse_bi variable without deleting any data
-gen mmse_bi_14 = mmse_14
-replace mmse_bi_14 = 1 if mmse_14 < 18
-replace mmse_bi_14 = 0 if mmse_14 >= 18
-replace mmse_bi_14 = . if mmse_14 == .
+* Generate mmse binary variable with cut off point as 18
+gen mmse_18bi_14 = mmse_11
+replace mmse_18_14 = 1 if mmse_14 < 18
+replace mmse_18_14 = 0 if mmse_14 >= 18
+replace mmse_18_14 = . if mmse_14 == .
+* Generate mmse binary variable with cut off point as 20
+gen mmse_20_14 = mmse
+replace mmse_20_14 = 1 if mmse_14 < 20
+replace mmse_20_14 = 0 if mmse_14 >= 20
+replace mmse_20_14 = .  if mmse_14 == .
+* Generate mmse binary variable with cut off point as 24
+gen mmse_24_11 = mmse
+replace mmse_24_14 = 1 if mmse_14 < 24
+replace mmse_24_14 = 0 if mmse_14 >= 24
+replace mmse_24_14 = .  if mmse_14 == .
+* Generate mmse binary variable according to the educational level
+* mmse_18 should be generated before run these codes
+gen mmse_edu = mmse
+replace mmse_edu_14 = 1 if edug == 1 & mmse_14 < 19
+replace mmse_edu_14 = 0 if edug == 1 & mmse_14 >= 19  ///without education
+replace mmse_edu_14 = 1 if edug == 2 & mmse_14 < 22
+replace mmse_edu_14 = 0 if edug == 2 & mmse_14 >= 22  ///primary school (6 yrs)
+replace mmse_edu_14 = 1 if edug == 3 & mmse_14 < 26
+replace mmse_edu_14 = 0 if edug == 3 & mmse_14 >= 26 & mmse_18 <= 28  ///middle school or higher (>6 yrs)
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
-tabulate mmse_bi_14
+tabulate mmse_18_14
+tabulate mmse_20_14
+tabulate mmse_24_14
+tabulate mmse_edu_14
 **************************2018年******************************
 * Step 1: set missing row less than 10
 gen byte mis_c16_18 = (c16_18 == 99 | c16_18 == 88)
@@ -298,12 +369,35 @@ gen mmse_18 = m1_18 + m2_18
 drop  mis_* total_mis_dontknow m1_18 m2_18
 tab mmse_18
 * Step 5: Generate mmse_bi variable without deleting any data
-gen mmse_bi_18 = mmse_18
-replace mmse_bi_18 = 1 if mmse_18 < 18
-replace mmse_bi_18 = 0 if mmse_18 >= 18
-replace mmse_bi_18 = . if mmse_18 == .
+* Generate mmse binary variable with cut off point as 18
+gen mmse_18_18 = mmse_11
+replace mmse_18_18 = 1 if mmse_18 < 18
+replace mmse_18_18 = 0 if mmse_18 >= 18
+replace mmse_18_18 = . if mmse_18 == .
+* Generate mmse binary variable with cut off point as 20
+gen mmse_20_18 = mmse
+replace mmse_20_18 = 1 if mmse_18 < 20
+replace mmse_20_18 = 0 if mmse_18 >= 20
+replace mmse_20_18 = .  if mmse_18 == .
+* Generate mmse binary variable with cut off point as 24
+gen mmse_24_11 = mmse
+replace mmse_24_18 = 1 if mmse_18 < 24
+replace mmse_24_18 = 0 if mmse_18 >= 24
+replace mmse_24_18 = .  if mmse_18 == .
+* Generate mmse binary variable according to the educational level
+* mmse_18 should be generated before run these codes
+gen mmse_edu = mmse
+replace mmse_edu_18 = 1 if edug == 1 & mmse_18 < 19
+replace mmse_edu_18 = 0 if edug == 1 & mmse_18 >= 19  ///without education
+replace mmse_edu_18 = 1 if edug == 2 & mmse_18 < 22
+replace mmse_edu_18 = 0 if edug == 2 & mmse_18 >= 22  ///primary school (6 yrs)
+replace mmse_edu_18 = 1 if edug == 3 & mmse_18 < 26
+replace mmse_edu_18 = 0 if edug == 3 & mmse_18 >= 26 & mmse_18 <= 28  ///middle school or higher (>6 yrs)
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
-tabulate mmse_bi_18
+tabulate mmse_18_18
+tabulate mmse_20_18
+tabulate mmse_24_18
+tabulate mmse_edu_18
 
 * 六.drop
 drop if trueage <65
@@ -321,20 +415,66 @@ drop if cmm_new == .
 
 
 * 七.计算cox需要的status和livetime,需根据入组年份修改
-* Status （98入组那就是从00开始）
-gen status = .
-replace status = 1 if mmse_bi_11 == 1 | mmse_bi_14 == 1 | mmse_bi_18 == 1
-replace status = 0 if status == .
-tabulate status
+* Status （98入组那就是从00开始
+* Generate Status with mmse cut off point as 18
+gen status_18 = .
+replace status_18 = 1 if mmse_18_11 == 1 | mmse_18_14 == 1 | mmse_18_18 == 1
+replace status_18 = 0 if status == .
+tabulate status_18
+* Generate Status with mmse cut off point as 20
+gen status_20 = .
+replace status_20 = 1 if mmse_20_11 == 1 | mmse_20_14 == 1 | mmse_20_18 == 1
+replace status_20 = 0 if status == .
+tabulate status_20
+* Generate Status with mmse cut off point as 24
+gen status_24 = .
+replace status_24 = 1 if mmse_24_11 == 1 | mmse_24_14 == 1 | mmse_24_18 == 1
+replace status_24 = 0 if status == .
+tabulate status_24
+* Generate Status with mmse according to educational level
+gen status_edu
+replace status_edu = 1 if mmse_edu_11 == 1 | mmse_edu_14 == 1 | mmse_edu_18 == 1
+replace status_edu = 0 if status == .
+tabulate status_edu
 * livetime 
-gen livetime = .
-replace livetime = yearin_11 - yearin_8 if mmse_bi == 0 & mmse_bi_11 == 1
-replace livetime = yearin_11 - yearin_8 if mmse_bi == 0 & mmse_bi_11 == 0 & mmse_bi_14 == .
-replace livetime = yearin_14 - yearin_8 if mmse_bi == 0 & mmse_bi_11 == 0 & mmse_bi_14 == 1
-replace livetime = yearin_14 - yearin_8 if mmse_bi == 0 & mmse_bi_11 == 0 & mmse_bi_14 == 0 & mmse_bi_18 == .
-replace livetime = yearin_18 - yearin_8 if mmse_bi == 0 & mmse_bi_11 == 0 & mmse_bi_14 == 0 & mmse_bi_18 == 1
-replace livetime = yearin_18 - yearin_8 if mmse_bi == 0 & mmse_bi_11 == 0 & mmse_bi_14 == 0 & mmse_bi_18 == 0
-tab livetime
+* Generate Livetime with mmse cut off point as 18
+gen livetime_18 = .
+replace livetime_18 = yearin_11 - yearin_8 if mmse_18 == 0 & mmse_18_11 == 1
+replace livetime_18 = yearin_11 - yearin_8 if mmse_18 == 0 & mmse_18_11 == 0 & mmse_18_14 == .
+replace livetime_18 = yearin_14 - yearin_8 if mmse_18 == 0 & mmse_18_11 == 0 & mmse_18_14 == 1
+replace livetime_18 = yearin_14 - yearin_8 if mmse_18 == 0 & mmse_18_11 == 0 & mmse_18_14 == 0 & mmse_18_18 == .
+replace livetime_18 = yearin_18 - yearin_8 if mmse_18 == 0 & mmse_18_11 == 0 & mmse_18_14 == 0 & mmse_18_18 == 1
+replace livetime_18 = yearin_18 - yearin_8 if mmse_18 == 0 & mmse_18_11 == 0 & mmse_18_14 == 0 & mmse_18_18 == 0
+tab livetime_18
+* Generate Livetime with mmse cut off point as 20
+gen livetime_20 = .
+replace livetime_20 = yearin_11 - yearin_8 if mmse_20 == 0 & mmse_20_11 == 1
+replace livetime_20 = yearin_11 - yearin_8 if mmse_20 == 0 & mmse_20_11 == 0 & mmse_20_14 == .
+replace livetime_20 = yearin_14 - yearin_8 if mmse_20 == 0 & mmse_20_11 == 0 & mmse_20_14 == 1
+replace livetime_20 = yearin_14 - yearin_8 if mmse_20 == 0 & mmse_20_11 == 0 & mmse_20_14 == 0 & mmse_20_18 == .
+replace livetime_20 = yearin_18 - yearin_8 if mmse_20 == 0 & mmse_20_11 == 0 & mmse_20_14 == 0 & mmse_20_18 == 1
+replace livetime_20 = yearin_18 - yearin_8 if mmse_20 == 0 & mmse_20_11 == 0 & mmse_20_14 == 0 & mmse_20_18 == 0
+tab livetime_20
+* Generate Livetime with mmse cut off point as 24
+gen livetime_24 = .
+replace livetime_24 = yearin_11 - yearin_8 if mmse_24 == 0 & mmse_24_11 == 1
+replace livetime_24 = yearin_11 - yearin_8 if mmse_24 == 0 & mmse_24_11 == 0 & mmse_24_14 == .
+replace livetime_24 = yearin_14 - yearin_8 if mmse_24 == 0 & mmse_24_11 == 0 & mmse_24_14 == 1
+replace livetime_24 = yearin_14 - yearin_8 if mmse_24 == 0 & mmse_24_11 == 0 & mmse_24_14 == 0 & mmse_24_18 == .
+replace livetime_24 = yearin_18 - yearin_8 if mmse_24 == 0 & mmse_24_11 == 0 & mmse_24_14 == 0 & mmse_24_18 == 1
+replace livetime_24 = yearin_18 - yearin_8 if mmse_24 == 0 & mmse_24_11 == 0 & mmse_24_14 == 0 & mmse_24_18 == 0
+tab livetime_24
+* Generate Livetime with mmse according to educational level
+gen livetime_edu_24 = .
+replace livetime_edu_24 = yearin_11 - yearin_8 if mmse_edu == 0 & mmse_edu_11 == 1
+replace livetime_edu_24 = yearin_11 - yearin_8 if mmse_edu == 0 & mmse_edu_11 == 0 & mmse_edu_14 == .
+replace livetime_edu_24 = yearin_14 - yearin_8 if mmse_edu == 0 & mmse_edu_11 == 0 & mmse_edu_14 == 1
+replace livetime_edu_24 = yearin_14 - yearin_8 if mmse_edu == 0 & mmse_edu_11 == 0 & mmse_edu_14 == 0 & mmse_edu_18 == .
+replace livetime_edu_24 = yearin_18 - yearin_8 if mmse_edu == 0 & mmse_edu_11 == 0 & mmse_edu_14 == 0 & mmse_edu_18 == 1
+replace livetime_edu_24 = yearin_18 - yearin_8 if mmse_edu == 0 & mmse_edu_11 == 0 & mmse_edu_14 == 0 & mmse_edu_18 == 0
+tab livetime_edu_24
+
+
 
 * 七. 计算死亡竞争风险模型的Status
 * Generate event and time variables
