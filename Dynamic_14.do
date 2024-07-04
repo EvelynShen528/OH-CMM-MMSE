@@ -29,7 +29,7 @@ replace g22 =0 if g22 ==2
 label define g22label 0 "no" 1 "yes" 9 "missing"
 label values g22 g22label
 tab g22
-
+*刷牙和口面颌疼痛
 
 * 四.Cardiometabolic Multimorbidity
 codebook g15a1 
@@ -60,6 +60,95 @@ label variable cmm "count of cardiometabolic multimorbidity"
 tabulate cmm_bi
 label variable cmm_bi "whether has cardiometabolic multimorbidity"
 *检查observation总数和cmm要是一样的
+****************************医院诊断疾病*************************
+*1. 高血压 Y
+gen Hypertension = 0
+replace Hypertension = 1 if g15a1 == 1 & g15a2 == 1
+*2. 糖尿病 Y
+gen Diabetes = 0
+replace Diabetes = 1 if g15b1 == 1 & g15b2 == 1
+*3. 心脏病 Y
+gen Heart = 0
+replace Heart = 1 if g15c1 == 1 & g15c2 == 1
+*4. 中风或脑血管疾病 Y
+gen Stroke = 0
+replace Stroke = 1 if g15d1 == 1 & g15d2 == 1
+*5. 呼吸系统疾病(支气管炎、肺气肿、肺炎、哮喘) Y
+gen Respiratory = 0
+replace Respiratory = 1 if g15e1 == 1 & g15e2 == 1
+*6. 肺结核 Y
+gen Tuberculosis = 0
+replace Tuberculosis = 1 if g15f1 == 1 & g15f2 == 1
+*7. 白内障
+gen Cataract = 0
+replace Cataract = 1 if g15g1 == 1 & g15g2 == 1
+*8. 青光眼
+gen Glaucoma = 0
+replace Glaucoma = 1 if g15h1 == 1 & g15h2 == 1
+*9. 癌症（前列腺/子宫肿瘤 Y
+gen Cancer = 0
+replace Cancer = 1 if g15i1 == 1 & g15i2 == 1
+replace Cancer = 1 if g15j1 == 1 & g15j2 == 1
+replace Cancer = 1 if g15u1 == 1 & g15u2 == 1
+*10. 消化道(胃溃疡、十二指肠溃疡穿孔) Y
+gen Digestive = 0
+replace Digestive = 1 if g15k1 == 1 & g15k2 == 1
+*11. 帕金森病 Y
+gen Parkinson = 0
+replace Parkinson = 1 if g15l1 == 1 & g15l2 == 1
+*12.关节炎或者类风湿疾病 Y
+gen Arthritis = 0
+replace Arthritis = 1 if g15n1 == 1 & g15n2 == 1
+replace Arthritis = 1 if g15n1a == 1 & g15n2a == 1
+*13.痴呆
+gen Dementia = 0
+replace Dementia = 1 if g15o1 == 1 & g15o2 == 1
+*14. 癫痫 Y
+gen Epilepsy = 0
+replace Epilepsy = 1 if g15p1 == 1 & g15p2 == 1
+*15. 胆道疾病（胆囊炎、胆石症) Y
+gen Gallbladder = 0
+replace Gallbladder = 1 if g15q1 == 1 & g15q2 == 1
+*16. 血液病 Y
+gen Blood = 0
+replace Blood = 1 if g15r1 == 1 & g15r2 == 1
+*17. 慢性肾炎 Y
+gen Nephritis = 0
+replace Nephritis = 1 if g15s1 == 1 & g15s2 == 1
+*18. 乳腺疾病
+gen Galactophore = 0
+replace Galactophore = 1 if g15t1 == 1 & g15t2 == 1
+*19. 肝炎 Y
+gen Hepatitis = 0
+replace Hepatitis = 1 if g15v1 == 1 & g15v2 == 1
+* Hypertension Diabetes Heart Stroke 
+* Respiratory Tuberculosis Cancer Digestive Parkinson Arthritis Epilepsy Gallbladder Blood Nephritis Hepatitis
+****************************MM和CMM*************************
+gen cmm_hos = Hypertension + Diabetes + Heart + Stroke 
+tab cmm_hos
+gen cmm_hos_bi = .
+replace cmm_hos_bi = 0 if cmm_hos <=1
+replace cmm_hos_bi = 1 if cmm_hos >=2
+tab cmm_hos_bi
+gen cmm_hos_cat = .
+replace cmm_hos_cat = 0 if cmm_hos == 0
+replace cmm_hos_cat = 1 if cmm_hos == 1
+replace cmm_hos_cat = 2 if cmm_hos == 2
+replace cmm_hos_cat = 3 if cmm_hos >=3
+tab cmm_hos_cat
+
+gen MM = Respiratory + Tuberculosis + Cancer + Digestive + Parkinson + Arthritis + Epilepsy + Gallbladder + Blood + Nephritis + Hepatitis
+tab MM
+gen MM_bi = .
+replace MM_bi = 0 if MM <=1
+replace MM_bi = 1 if MM >=2
+tab MM_bi
+gen MM_cat = .
+replace MM_cat = 0 if MM == 0
+replace MM_cat = 1 if MM == 1
+replace MM_cat = 2 if MM == 2
+replace MM_cat = 3 if MM >=3
+tab MM_cat
 ****************************新发cmm*************************
 ///2018////
 codebook g15a1_18 
@@ -347,7 +436,7 @@ replace combined_time_to_event = . if combined_time_to_event <= entry_time
 save as "Full_14in"
 
 * （2）再保留我们需要的变量，不然append之后太多
-keep id trueage a1 residence edug occu f45 marital r_smkl_pres r_smkl_past r_smkl_start r_smkl_quit r_smkl_freq r_dril_pres r_dril_past r_dril_start r_dril_quit r_dril_type r_dril_freq SBP DBP srhealth hypertension diabetes strokecvd disease disease_sum g106 g1061 g1062 g1063  psycho d91 d92 d93 d94 g15o1 g15o1_18 g21 g21_cat g22 g23 g24 g24a g25 g25a cmm cmm_bi cmm_new status livetime mmse mmse_bi mmse_18 mmse_bi_18 combined_time_to_event event_type death_year time_to_death event_year time_to_event entry_time
+keep id trueage a1 residence edug occu f45 marital r_smkl_pres r_smkl_past r_smkl_start r_smkl_quit r_smkl_freq r_dril_pres r_dril_past r_dril_start r_dril_quit r_dril_type r_dril_freq SBP DBP srhealth hypertension diabetes strokecvd disease disease_sum g106 g1061 g1062 g1063  psycho d91 d92 d93 d94 g15o1 g15o1_18 g21 g21_cat g22 g23 g24 g24a g25 g25a cmm cmm_bi cmm_new cmm_hos cmm_hos_bi cmm_hos_cat MM MM_bi MM_cat Hypertension Diabetes Heart Stroke Respiratory Tuberculosis Cancer Digestive Parkinson Arthritis Epilepsy Gallbladder Blood Nephritis Hepatitis Cataract Glaucoma Dementia Galactophore status livetime mmse mmse_bi mmse_18 mmse_bi_18 combined_time_to_event event_type death_year time_to_death event_year time_to_event entry_time
 
 save as "Br_14in"
 
