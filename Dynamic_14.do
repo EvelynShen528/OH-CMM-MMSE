@@ -194,17 +194,17 @@ replace mmse_18_18 = 1 if mmse_18 < 18
 replace mmse_18_18 = 0 if mmse_18 >= 18
 replace mmse_18_18 = . if mmse_18 == .
 * Generate mmse binary variable with cut off point as 20
-gen mmse_20_18 = mmse
+gen mmse_20_18 = mmse_18
 replace mmse_20_18 = 1 if mmse_18 < 20
 replace mmse_20_18 = 0 if mmse_18 >= 20
 replace mmse_20_18 = . if mmse_18 == .
 * Generate mmse binary variable with cut off point as 24
-gen mmse_24_18 = mmse
+gen mmse_24_18 = mmse_18
 replace mmse_24_18 = 1 if mmse_18 < 24
 replace mmse_24_18 = 0 if mmse_18 >= 24
 replace mmse_24_18 = . if mmse_18 == .
 * Generate mmse binary variable according to the educational level. 
-gen mmse_edu_18 = mmse
+gen mmse_edu_18 = mmse_18
 replace mmse_edu_18 = 1 if edug == 1 & mmse_18 < 19
 replace mmse_edu_18 = 0 if edug == 1 & mmse_18 >= 19  ///without education
 replace mmse_edu_18 = 1 if edug == 2 & mmse_18 < 22
@@ -235,15 +235,47 @@ drop if cmm_new == .
 
 * 七.计算cox需要的status和livetime,需根据入组年份修改
 * Status （98入组那就是从00开始）
-gen status = .
-replace status = 1 if mmse_bi_18 == 1
-replace status = 0 if status == .
-tabulate status
+* Generate Status with mmse cut off point as 18
+gen status_18 = .
+replace status_18 = 1 if mmse_18_18 == 1
+replace status_18 = 0 if status_18 == .
+tabulate status_18
+* Generate Status with mmse cut off point as 20
+gen status_20 = .
+replace status_20 = 1 if mmse_20_18 == 1
+replace status_20 = 0 if status_20 == .
+tabulate status_20
+* Generate Status with mmse cut off point as 24
+gen status_24 = .
+replace status_24 = 1 if mmse_24_18 == 1
+replace status_24 = 0 if status_24 == .
+tabulate status_24
+* Generate Status with mmse according to educational level
+gen status_edu = .
+replace status_edu = 1 if mmse_edu_18 == 1
+replace status_edu = 0 if status_edu == .
+tabulate status_edu
 * livetime 
-gen livetime = .
-replace livetime = yearin_18 - yearin_14 if mmse_bi == 0 & mmse_bi_18 == 1
-replace livetime = yearin_18 - yearin_14 if mmse_bi == 0 & mmse_bi_18 == 0
-tab livetime
+* Generate livetime with mmse cut off point as 18
+gen livetime_18 = .
+replace livetime_18 = yearin_18 - yearin_14 if mmse_18 == 0 & mmse_18_18 == 1
+replace livetime_18 = yearin_18 - yearin_14 if mmse_18 == 0 & mmse_18_18 == 0
+tab livetime_18
+* Generate livetime with mmse cut off point as 20
+gen livetime_20 = .
+replace livetime_20 = yearin_18 - yearin_14 if mmse_20 == 0 & mmse_20_18 == 1
+replace livetime_20 = yearin_18 - yearin_14 if mmse_20 == 0 & mmse_20_18 == 0
+tab livetime_20
+* Generate livetime with mmse cut off point as 24
+gen livetime_24 = .
+replace livetime_24 = yearin_18 - yearin_14 if mmse_24 == 0 & mmse_24_18 == 1
+replace livetime_24 = yearin_18 - yearin_14 if mmse_24 == 0 & mmse_24_18 == 0
+tab livetime_24
+* Generate livetime with mmse according to educational level
+gen livetime_edu = .
+replace livetime_edu = yearin_18 - yearin_14 if mmse_edu == 0 & mmse_edu_18 == 1
+replace livetime_edu = yearin_18 - yearin_14 if mmse_edu == 0 & mmse_edu_18 == 0
+tab livetime_edu
 
 * 七. 计算死亡竞争风险模型的Status
 * Generate event and time variables
