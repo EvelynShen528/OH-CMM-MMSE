@@ -242,22 +242,22 @@ drop  mis_* total_mis_dontknow m1_11 m2_11
 tab mmse_11
 * Step 5: Generate mmse_bi variable without deleting any data
 * Generate mmse binary variable with cut off point as 18
-gen mmse_18bi_11 = mmse_11
+gen mmse_18_11 = mmse_11
 replace mmse_18_11 = 1 if mmse_11 < 18
 replace mmse_18_11 = 0 if mmse_11 >= 18
 replace mmse_18_11 = . if mmse_11 == .
 * Generate mmse binary variable with cut off point as 20
-gen mmse_20_11 = mmse
+gen mmse_20_11 = mmse_11
 replace mmse_20_11 = 1 if mmse_11 < 20
 replace mmse_20_11 = 0 if mmse_11 >= 20
 replace mmse_20_11 = .  if mmse_11 == .
 * Generate mmse binary variable with cut off point as 24
-gen mmse_24_11 = mmse
+gen mmse_24_11 = mmse_11
 replace mmse_24_11 = 1 if mmse_11 < 24
 replace mmse_24_11 = 0 if mmse_11 >= 24
 replace mmse_24_11 = .  if mmse_11 == .
 * Generate mmse binary variable according to the educational level
-gen mmse_edu = mmse
+gen mmse_edu = mmse_11
 replace mmse_edu_11 = 1 if edug == 1 & mmse_11 < 19
 replace mmse_edu_11 = 0 if edug == 1 & mmse_11 >= 19  ///without education
 replace mmse_edu_11 = 1 if edug == 2 & mmse_11 < 22
@@ -305,28 +305,28 @@ drop  mis_* total_mis_dontknow m1_14 m2_14
 tab mmse_14
 * Step 5: Generate mmse_bi variable without deleting any data
 * Generate mmse binary variable with cut off point as 18
-gen mmse_18bi_14 = mmse_11
+gen mmse_18_14 = mmse_11_14
 replace mmse_18_14 = 1 if mmse_14 < 18
 replace mmse_18_14 = 0 if mmse_14 >= 18
 replace mmse_18_14 = . if mmse_14 == .
 * Generate mmse binary variable with cut off point as 20
-gen mmse_20_14 = mmse
+gen mmse_20_14 = mmse_14
 replace mmse_20_14 = 1 if mmse_14 < 20
 replace mmse_20_14 = 0 if mmse_14 >= 20
 replace mmse_20_14 = .  if mmse_14 == .
 * Generate mmse binary variable with cut off point as 24
-gen mmse_24_11 = mmse
+gen mmse_24_14 = mmse_14
 replace mmse_24_14 = 1 if mmse_14 < 24
 replace mmse_24_14 = 0 if mmse_14 >= 24
 replace mmse_24_14 = .  if mmse_14 == .
 * Generate mmse binary variable according to the educational level
-gen mmse_edu = mmse
+gen mmse_edu_14 = mmse_14
 replace mmse_edu_14 = 1 if edug == 1 & mmse_14 < 19
 replace mmse_edu_14 = 0 if edug == 1 & mmse_14 >= 19  ///without education
 replace mmse_edu_14 = 1 if edug == 2 & mmse_14 < 22
 replace mmse_edu_14 = 0 if edug == 2 & mmse_14 >= 22  ///primary school (6 yrs)
 replace mmse_edu_14 = 1 if edug == 3 & mmse_14 < 26
-replace mmse_edu_14 = 0 if edug == 3 & mmse_14 >= 26 & mmse_18 <= 28  ///middle school or higher (>6 yrs)
+replace mmse_edu_14 = 0 if edug == 3 & mmse_14 >= 26 & mmse_14 <= 28  ///middle school or higher (>6 yrs)
 *检查不要有超过30的数值，超过了要检查代码重新计算，不可以直接剔除>99的
 tabulate mmse_18_14
 tabulate mmse_20_14
@@ -367,22 +367,22 @@ drop  mis_* total_mis_dontknow m1_18 m2_18
 tab mmse_18
 * Step 5: Generate mmse_bi variable without deleting any data
 * Generate mmse binary variable with cut off point as 18
-gen mmse_18_18 = mmse_11
+gen mmse_18_18 = mmse_18
 replace mmse_18_18 = 1 if mmse_18 < 18
 replace mmse_18_18 = 0 if mmse_18 >= 18
 replace mmse_18_18 = . if mmse_18 == .
 * Generate mmse binary variable with cut off point as 20
-gen mmse_20_18 = mmse
+gen mmse_20_18 = mmse_18
 replace mmse_20_18 = 1 if mmse_18 < 20
 replace mmse_20_18 = 0 if mmse_18 >= 20
 replace mmse_20_18 = .  if mmse_18 == .
 * Generate mmse binary variable with cut off point as 24
-gen mmse_24_11 = mmse
+gen mmse_24_18 = mmse_18
 replace mmse_24_18 = 1 if mmse_18 < 24
 replace mmse_24_18 = 0 if mmse_18 >= 24
 replace mmse_24_18 = .  if mmse_18 == .
 * Generate mmse binary variable according to the educational level
-gen mmse_edu = mmse
+gen mmse_edu_18 = mmse_18
 replace mmse_edu_18 = 1 if edug == 1 & mmse_18 < 19
 replace mmse_edu_18 = 0 if edug == 1 & mmse_18 >= 19  ///without education
 replace mmse_edu_18 = 1 if edug == 2 & mmse_18 < 22
